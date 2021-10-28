@@ -1,25 +1,24 @@
 import { createRouter, createWebHistory } from 'vue-router';
-//import VueRouter from 'vuo-router';
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
             path: '/',
-            component: () => import('../views/Hello.vue')
+            component: () => import('../views/TodoPage.vue'),
         },
-        //{
-        //    path: '/register',
-        //    component: () => import('../views/Register.vue')
-        //},
-        //{
-        //    path: '/sign-in',
-        //    component: () => import('../views/SignIn.vue')
-        //},
-        //{
-        //    path: '/feed',
-        //    component: () => import('../views/Feed.vue')
-        //}
+        {
+            path: '/polut',
+            component: () => import('../views/Editor/ConversationEditor.vue'),
+        },
+        {
+            path: '/analytiikka/:id',
+            component: () => import('../views/Anal/ConversationAnal.vue'),
+        },
+        {
+            path: '/asetukset',
+            component: () => import('../views/TodoPage.vue'),
+        },
     ]
 });
 
