@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+//import VueRouter from 'vuo-router';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -7,18 +8,18 @@ const router = createRouter({
             path: '/',
             component: () => import('../views/Hello.vue')
         },
-        {
-            path: '/register',
-            component: () => import('../views/Register.vue')
-        },
-        {
-            path: '/sign-in',
-            component: () => import('../views/SignIn.vue')
-        },
-        {
-            path: '/feed',
-            component: () => import('../views/Feed.vue')
-        }
+        //{
+        //    path: '/register',
+        //    component: () => import('../views/Register.vue')
+        //},
+        //{
+        //    path: '/sign-in',
+        //    component: () => import('../views/SignIn.vue')
+        //},
+        //{
+        //    path: '/feed',
+        //    component: () => import('../views/Feed.vue')
+        //}
     ]
 });
 
