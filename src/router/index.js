@@ -12,6 +12,10 @@ const router = createRouter({
             component: () => import('../views/Editor/ConversationEditor.vue'),
         },
         {
+            path: '/analytiikka',
+            component: () => import('../views/Anal/ConversationAnal2.vue'),
+        },
+        {
             path: '/analytiikka/:id',
             component: () => import('../views/Anal/ConversationAnal.vue'),
         },

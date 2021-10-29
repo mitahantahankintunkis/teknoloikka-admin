@@ -3,7 +3,7 @@
 const listItems = [
     { label: 'Yleiskatsaus', path: '/' },
     { label: 'Polut', path: '/polut' },
-    { label: 'Analytiikka', path: '/analytiikka/0' },
+    { label: 'Analytiikka', path: '/analytiikka' },
 ]
 
 </script>

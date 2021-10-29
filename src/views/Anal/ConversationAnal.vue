@@ -1,11 +1,15 @@
 <template>
     <h1>{{ title }}</h1>
+    <!--
     <PieChart @selected="selectedSegment" :key="title" :labels="labels" :data="amounts"></PieChart>
+    -->
+    <LineChart @selected="selectedSegment" :key="title" :labels="labels" :data="amounts"></LineChart>
 </template>
 
 
 <script setup>
 import PieChart from "./PieChart.vue";
+import LineChart from "./LineChart.vue";
 import Vue3ChartJs from "@j-t-mcc/vue3-chartjs";
 import { useRoute, useRouter } from "vue-router";
 import { ref, watch } from "@vue/runtime-core";
