@@ -1,11 +1,9 @@
 <template>
     <div class="cont">
-        <div class="left-cont">
-            <h3>Yleistietoa</h3>
-            <div class="cont-row">
-                <div class="card">
-                    <ConversationPaths :answers="answers"></ConversationPaths>
-                </div>
+        <div class="cont-row">
+            <h3 class="card-title">Keskustelutietoa</h3>
+            <div class="card">
+                <ConversationPaths :key="answers.size" :nodes="nodes" :edges="edges" :answers="answers"></ConversationPaths>
             </div>
         </div>
     </div>
@@ -123,7 +121,7 @@ async function fetchConversations() {
     nextSelected(selected.value);
 }
 
-//fetchConversations();
+fetchConversations();
 nextSelected(0);
 
 </script>
@@ -141,7 +139,8 @@ nextSelected(0);
 }
 
 .cont-row {
-
+    width: 95%;
+    margin: 0 auto;
 }
 
 .left-cont {
@@ -169,5 +168,10 @@ ul {
 .temp-next {
     cursor: pointer;
     text-decoration: underline;
+}
+
+.card-title {
+    font-weight: 400;
+    padding: 0 0 0.5rem 0.2rem;
 }
 </style>

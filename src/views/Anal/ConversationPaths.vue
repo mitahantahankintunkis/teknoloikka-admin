@@ -1,17 +1,16 @@
 <template>
-    <div class="cont">
-        <div class="cont-item">
+    <div class="datacont">
+        <div class="cont-item graph">
             <h2>Kysymys: {{ title }}</h2>
             <h3>{{ numOfAnswers }} vastausta</h3>
             <LineChart :key="`${selected}-${amounts.join()}`" :labels="labels" :data="amounts"></LineChart>
-            <div class="chart"></div>
         </div>
         <div class="cont-item">
-            <h2>Seuraavat kysymykset</h2>
+            <h2>Seuraavat kysymykset (temp)</h2>
             <ul>
                 <li v-for="id in next" :key="id">
                     <div class="temp-next" @click="nextSelected(id)">
-                        {{ nodes.find((n) => n.id === id).label }}
+                        {{ props.nodes.find((n) => n.id === id).label }}
                     </div>
                 </li>
             </ul>
@@ -26,16 +25,7 @@ import LineChart from "./LineChart.vue";
 import { collection, query, where, orderBy, getDocs, limit } from "firebase/firestore"; 
 
 
-const props = defineProps(['answers']);
-
-let id = 0;
-const nodes = [
-    { id: id++, label: 'Beep-boop, olen UKV-botti 🤖. Kuinka voin auttaa?', },
-    { id: id++, label: 'Miten menee?', },
-    { id: id++, label: 'Miten arvostelisit Krapin pippalot?', },
-    { id: id++, label: 'Mitä haluat tehdä huomenna?', },
-    { id: id++, label: 'Kiitos vastauksista! Palaan keskustelun alkuun, jos haluat muuttaa vastauksiasi', },
-];
+const props = defineProps(['answers', 'nodes', 'edges']);
 
 const selected = ref(0);
 const title = ref('');
@@ -47,19 +37,20 @@ const next = ref(new Set());
 
 function nextSelected(id) {
     selected.value = id;
-    title.value = nodes.find((n) => n.id === Number(selected.value)).label;
+    title.value = props.nodes.find((n) => n.id === Number(selected.value)).label;
 
     labels.value.splice(0);
     amounts.value.splice(0);
     next.value.clear();
 
-    edges.forEach((e, i) => {
+    props.edges.forEach((e, i) => {
         let id = Number(selected.value) || 0;
 
         if (e.from === id) {
             labels.value.push(e.label);
-            const answer = props.answers.value.get(e.id);
-            amounts.value.push(answer.count || 0);
+            const answer = props.answers.get(e.id);
+            const count = answer ? answer.count : 0;
+            amounts.value.push(count);
             next.value.add(e.to);
         }
     });
@@ -73,28 +64,26 @@ nextSelected(0);
 
 
 <style scoped>
-.cont {
-    background-color: #f2f2f2;
+.datacont {
+    background-color: white;
+    padding: 1rem;
     width: 100%;
     height: calc(100% - 2rem);
-    gap: 1rem;
-    padding: 2rem 0 0 0;
+    gap: 3rem;
     display: flex;
-    flex-direction: column;
+    border-radius: 0.2rem;
 }
 
-.left-cont {
-    width: 100%;
+.cont-item {
+    width: 50%;
 }
-.right-cont {
-    width: 100%;
-}
-.left-cont h2 {
+
+h2 {
     text-align: start;
     padding-left: 1rem;
 }
 
-.left-cont h3 {
+h3 {
     text-align: start;
     margin-bottom: 2rem;
     padding-left: 1rem;
