@@ -1,12 +1,19 @@
 <template>
     <div class="datacont">
-        <div class="cont-item graph">
-            <h2>Kysymys: {{ title }}</h2>
-            <h3>{{ numOfAnswers }} vastausta</h3>
+        <div v-if="numOfAnswers === 0" class="cont-item graph">
+            <h3>Kysymys: {{ title }}</h3>
+            <h4>Ei vastauksia</h4>
+        </div>
+        <div v-else class="cont-item graph">
+            <h3>Kysymys: {{ title }}</h3>
+            <h4>{{ numOfAnswers }} vastausta</h4>
             <LineChart :key="`${selected}-${amounts.join()}`" :labels="labels" :data="amounts"></LineChart>
         </div>
-        <div class="cont-item">
-            <h2>Seuraavat kysymykset (temp)</h2>
+        <div class="cont-item treeview">
+            <h3>Keskustelupuu</h3>
+            <TreeVisualizer @selected="nextSelected" :key="`${selected}-${amounts.join()}`" :selected="selected" :nodes="nodes" :edges="edges"></TreeVisualizer>
+
+            <!--
             <ul>
                 <li v-for="id in next" :key="id">
                     <div class="temp-next" @click="nextSelected(id)">
@@ -14,6 +21,7 @@
                     </div>
                 </li>
             </ul>
+            -->
         </div>
     </div>
 </template>
@@ -22,7 +30,7 @@
 <script setup>
 import { inject, ref } from "@vue/runtime-core";
 import LineChart from "./LineChart.vue";
-import { collection, query, where, orderBy, getDocs, limit } from "firebase/firestore"; 
+import TreeVisualizer from "./TreeVisualizer.vue";
 
 
 const props = defineProps(['answers', 'nodes', 'edges']);
@@ -34,7 +42,6 @@ const labels = ref([]);
 const amounts = ref([]);
 const next = ref(new Set());
 
-
 function nextSelected(id) {
     selected.value = id;
     title.value = props.nodes.find((n) => n.id === Number(selected.value)).label;
@@ -43,17 +50,26 @@ function nextSelected(id) {
     amounts.value.splice(0);
     next.value.clear();
 
-    props.edges.forEach((e, i) => {
-        let id = Number(selected.value) || 0;
+    for (let i = 0; i < props.edges.length; ++i) {
+        const e = props.edges[i];
+        let node_id = Number(selected.value) || 0;
 
-        if (e.from === id) {
-            labels.value.push(e.label);
+        if (e.from === node_id) {
+            //if (!e.label) {
+            //    nextSelected(e.to);
+            //    return;
+            //}
+
+            if (e.label) {
+                labels.value.push(e.label);
+            }
+
             const answer = props.answers.get(e.id);
             const count = answer ? answer.count : 0;
             amounts.value.push(count);
             next.value.add(e.to);
         }
-    });
+    };
 
     numOfAnswers.value = amounts.value.reduce((a, b) => a + b, 0);
 }
@@ -76,6 +92,8 @@ nextSelected(0);
 
 .cont-item {
     width: 50%;
+    display: flex;
+    flex-direction: column;
 }
 
 h2 {
@@ -85,7 +103,14 @@ h2 {
 
 h3 {
     text-align: start;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
+    padding-left: 1rem;
+    font-weight: 600;
+}
+
+h4 {
+    text-align: start;
+    margin-bottom: 3rem;
     padding-left: 1rem;
     font-weight: 600;
 }
@@ -97,5 +122,10 @@ ul {
 .temp-next {
     cursor: pointer;
     text-decoration: underline;
+    margin-top: 2rem;
+}
+
+.treeview {
+    min-height: 30rem;
 }
 </style>

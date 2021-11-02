@@ -7,40 +7,6 @@
 import { onMounted, ref } from "@vue/runtime-core";
 import * as d3 from "d3";
 
-//let id = 0;
-//const nodes = [
-//    { id: id++, label: 'Beep-boop, olen UKV-botti 🤖. Kuinka voin auttaa?', },
-//    { id: id++, label: 'Miten menee?', },
-//    { id: id++, label: 'Miten arvostelisit Krapin pippalot?', },
-//    { id: id++, label: 'Mitä haluat tehdä huomenna?', },
-//    { id: id++, label: 'Kiitos vastauksista! Palaan keskustelun alkuun, jos haluat muuttaa vastauksiasi', },
-//];
-//
-//id = 0;
-//const edges = [
-//    { id: id++, from: 0, to: 1, label: 'Haluan vastata Krapin kyselyyn', },
-//    { id: id++, from: 1, to: 2, label: 'Mainiosti!', },
-//    { id: id++, from: 1, to: 2, label: 'Hyvin', },
-//    { id: id++, from: 1, to: 2, label: 'Menettelee', },
-//    { id: id++, from: 1, to: 2, label: 'Hengissä vielä', },
-//    { id: id++, from: 2, to: 3, label: '5', },
-//    { id: id++, from: 2, to: 3, label: '4', },
-//    { id: id++, from: 2, to: 3, label: '3', },
-//    { id: id++, from: 2, to: 3, label: '2', },
-//    { id: id++, from: 2, to: 3, label: '1', },
-//    { id: id++, from: 3, to: 4, label: 'Työskennellä', },
-//    { id: id++, from: 3, to: 4, label: 'Jutella porukan kanssa', },
-//    { id: id++, from: 3, to: 4, label: 'Rentoutua', },
-//    { id: id++, from: 3, to: 4, label: 'Ryypätä', },
-//];
-//
-//const answers = [
-//    32,
-//    8, 16, 6, 2,
-//    8, 14, 9, 1, 0,
-//    4, 6, 4, 18,
-//];
-
 const emit = defineEmits(['selected']);
 const props = defineProps(['labels', 'data']);
 
@@ -143,3 +109,40 @@ onMounted(function() {
     width: 100%;
 }
 </style>
+
+<!--
+//let id = 0;
+//const nodes = [
+//    { id: id++, label: 'Beep-boop, olen UKV-botti 🤖. Kuinka voin auttaa?', },
+//    { id: id++, label: 'Miten menee?', },
+//    { id: id++, label: 'Miten arvostelisit Krapin pippalot?', },
+//    { id: id++, label: 'Mitä haluat tehdä huomenna?', },
+//    { id: id++, label: 'Kiitos vastauksista! Palaan keskustelun alkuun, jos haluat muuttaa vastauksiasi', },
+//];
+//
+//id = 0;
+//const edges = [
+//    { id: id++, from: 0, to: 1, label: 'Haluan vastata Krapin kyselyyn', },
+//    { id: id++, from: 1, to: 2, label: 'Mainiosti!', },
+//    { id: id++, from: 1, to: 2, label: 'Hyvin', },
+//    { id: id++, from: 1, to: 2, label: 'Menettelee', },
+//    { id: id++, from: 1, to: 2, label: 'Hengissä vielä', },
+//    { id: id++, from: 2, to: 3, label: '5', },
+//    { id: id++, from: 2, to: 3, label: '4', },
+//    { id: id++, from: 2, to: 3, label: '3', },
+//    { id: id++, from: 2, to: 3, label: '2', },
+//    { id: id++, from: 2, to: 3, label: '1', },
+//    { id: id++, from: 3, to: 4, label: 'Työskennellä', },
+//    { id: id++, from: 3, to: 4, label: 'Jutella porukan kanssa', },
+//    { id: id++, from: 3, to: 4, label: 'Rentoutua', },
+//    { id: id++, from: 3, to: 4, label: 'Ryypätä', },
+//];
+//
+//const answers = [
+//    32,
+//    8, 16, 6, 2,
+//    8, 14, 9, 1, 0,
+//    4, 6, 4, 18,
+//];
+
+-->
