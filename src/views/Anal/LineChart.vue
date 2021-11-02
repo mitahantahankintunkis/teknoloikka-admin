@@ -48,7 +48,7 @@ onMounted(function() {
     const total = d3.sum(props.data);
     const chart = d3.select('.chart');
     const xScale = d3.scaleLinear()
-        .domain([0, d3.max(props.data)])
+        .domain([0, d3.max(props.data) || 1])
         .range([0, 100]);
 
     const yLabels = chart.append('div')
@@ -59,7 +59,7 @@ onMounted(function() {
         .attr('class', 'label-cont')
         .append('div')
         .attr('class', 'label')
-        .text((d) => `${Math.round((d / total) * 100)}%`);
+        .text((d) => `${total === 0 ? 0 : Math.round((d / total) * 100)}%`);
 
     const bars = chart.append('div')
         .attr('class', 'bars')

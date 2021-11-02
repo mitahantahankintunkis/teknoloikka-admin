@@ -1,28 +1,23 @@
 <template>
     <div class="cont">
         <div class="left-cont">
-            <h2>Kysymys: {{ title }}</h2>
-            <h3>{{ numOfAnswers }} vastausta</h3>
-            <LineChart :key="selected" :labels="labels" :data="amounts"></LineChart>
-            <div class="chart"></div>
-        </div>
-        <div class="right-cont">
-            <h2>Seuraavat kysymykset</h2>
-            <ul>
-                <li v-for="id in next" :key="id">
-                    <div class="temp-next" @click="nextSelected(id)">
-                        {{ nodes.find((n) => n.id === id).label }}
-                    </div>
-                </li>
-            </ul>
+            <h3>Yleistietoa</h3>
+            <div class="cont-row">
+                <div class="card">
+                    <ConversationPaths :answers="answers"></ConversationPaths>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 
 <script setup>
-import { onMounted, ref } from "@vue/runtime-core";
+import { inject, ref } from "@vue/runtime-core";
 import LineChart from "./LineChart.vue";
+import { collection, query, where, orderBy, getDocs, limit } from "firebase/firestore";
+import ConversationPaths from "./ConversationPaths.vue"; 
+
 
 let id = 0;
 const nodes = [
@@ -52,14 +47,17 @@ const edges = [
     { id: id++, from: 4, to: 0, label: 'Palaa alkuun', },
 ];
 
-const answers = [
-    32,
-    8, 16, 6, 2,
-    8, 14, 9, 1, 0,
-    4, 6, 4, 18,
-    8,
-];
+//const answers = [
+//    32,
+//    8, 16, 6, 2,
+//    8, 14, 9, 1, 0,
+//    4, 6, 4, 18,
+//    8,
+//];
 
+const answers = ref(new Map());
+
+const db = inject('db');
 const selected = ref(0);
 const title = ref('');
 const numOfAnswers = ref(0);
@@ -81,7 +79,7 @@ function nextSelected(id) {
 
         if (e.from === id) {
             labels.value.push(e.label);
-            amounts.value.push(answers[i]);
+            amounts.value.push(answers.value.get(e.id) || 0);
             next.value.add(e.to);
         }
     });
@@ -89,6 +87,43 @@ function nextSelected(id) {
     numOfAnswers.value = amounts.value.reduce((a, b) => a + b, 0);
 }
 
+async function fetchConversations() {
+    if (!db) return;
+    console.log('fetching');
+
+    const startDate = new Date(Date.now() - (7 * 24 * 60 * 60 * 1000));
+    const q = query(collection(db, 'conversations'),
+        where('timestamp', '>', startDate),
+        orderBy('timestamp', 'desc'),
+        limit(1000),
+    );
+
+    const snapshot = await getDocs(q);
+
+    // Counts how many replies each node has
+    snapshot.forEach((doc) => {
+        const message = doc.data();
+        const cur = answers.value.get(message.edge_id) || {
+            count: 0,
+            from: message.parent,
+            to: message.next,
+            label: message.label,
+            timestamps: [],
+            uids: [],
+        };
+
+        answers.value.set(message.edge_id, {
+            ...cur,
+            count: cur.count + 1,
+            timestamps: cur.timestamps.concat(message.timestamp),
+            uids: cur.uids.concat(message.uid),
+        });
+    });
+
+    nextSelected(selected.value);
+}
+
+//fetchConversations();
 nextSelected(0);
 
 </script>
@@ -96,11 +131,17 @@ nextSelected(0);
 
 <style scoped>
 .cont {
+    background-color: #f2f2f2;
     width: 100%;
     height: calc(100% - 2rem);
-    display: flex;
     gap: 1rem;
     padding: 2rem 0 0 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.cont-row {
+
 }
 
 .left-cont {
