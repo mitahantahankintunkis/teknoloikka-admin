@@ -8,8 +8,11 @@
 <template>
 <div class="wrapper">
     <h1>TODO</h1>
-    <p>Tämä sivusto sisältää vasta lähtökohdan, minkä perusteella voidaan aloittaa dashboardin kehittäminen. Otan mielelläni vastaan kehitysideoita sekä käyttöliittymästä että sivuston sisällöstä.</p>
+    <p>
+        Tämä sivusto sisältää työkaluja UKV-keskustelubotin polkujen luomiseen ja käyttäjien vastauksien toimintaan. Sivusto on vielä alkuvaiheissa, jotenka jos sinulla on joitakin kehitysehdotuksia, niin otamme ne WP6:den tiimiin mielellämme vastaan.
+    </p>
 
+<!--
     <div class="usecases">
         <p>Käyttötapaukset:</p>
 
@@ -35,6 +38,7 @@
             </ul>
         </div>
     </div>
+    -->
 </div>
 </template>
 
@@ -72,5 +76,6 @@ p {
 .wrapper {
     display: flex;
     flex-direction: column;
+    padding: 2rem;
 }
 </style>

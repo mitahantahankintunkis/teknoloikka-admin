@@ -79,6 +79,7 @@ const edges = [
 ];
 
 
+// Fetches conversations from the database
 async function fetchConversations() {
     if (!db) return;
     console.log('fetching');
@@ -116,14 +117,9 @@ async function fetchConversations() {
             uids: cur.uids.concat(message.uid),
         });
     });
-
-    //for (const [k, v] of answers.value.entries()) {
-    //    console.log(k, v);
-    //}
-    //nextSelected(selected.value);
 }
 
-fetchConversations();
+//fetchConversations();
 
 </script>
 

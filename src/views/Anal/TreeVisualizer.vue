@@ -104,7 +104,7 @@ onMounted(function() {
     messages.append('rect')
         .attr('fill', 'white')
         .attr('stroke', (d) => d.id === props.selected ? '#cc4444' : '#444444')
-        .attr('stroke-width', 1)
+        .attr('stroke-width', (d) => d.id === props.selected ? 2 : 1)
         .attr('width', width * size)
         .attr('height', height * size)
         .attr('rx', 6)
@@ -130,9 +130,6 @@ onMounted(function() {
 .treeview {
     width: 100%;
     height: 100%;
-    /*
-    Inner white shadow
-    box-shadow: black 0 0 4px 4px;
-    */
+    border: 1px solid #fafafa;
 }
 </style>

@@ -1,7 +1,7 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router';
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHashHistory(),
     routes: [
         {
             path: '/',
@@ -9,15 +9,11 @@ const router = createRouter({
         },
         {
             path: '/polut',
-            component: () => import('../views/Editor/ConversationEditor.vue'),
+            component: () => import('../views/TodoPage.vue'),
         },
         {
             path: '/analytiikka',
             component: () => import('../views/Anal/ConversationAnal2.vue'),
-        },
-        {
-            path: '/analytiikka/:id',
-            component: () => import('../views/Anal/ConversationAnal.vue'),
         },
         {
             path: '/asetukset',
