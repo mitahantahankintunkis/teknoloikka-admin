@@ -119,7 +119,7 @@ async function fetchConversations() {
     });
 }
 
-//fetchConversations();
+fetchConversations();
 
 </script>
 
