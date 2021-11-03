@@ -1,7 +1,7 @@
 <template>
     <div class="treeview">
         <svg width="100%" height="100%">
-            <g>
+            <g :transform="`translate(${prevTransform.x},${prevTransform.y}) scale(${prevTransform.k})`">
                 <!--
                 <g transform="translate(0,0) scale(1)">
                 <g transform="" {`translate(${prevTransform.x},${prevTransform.y}) scale(${prevTransform.k})`}>
@@ -16,12 +16,24 @@
 
 
 <script setup>
-import { onMounted, ref } from "@vue/runtime-core";
+import { onBeforeUnmount, onDeactivated, onMounted, onUnmounted, ref } from "@vue/runtime-core";
 import * as d3 from "d3";
 
 
 const emit = defineEmits(['selected']);
 const props = defineProps(['selected', 'nodes', 'edges']);
+
+const prevTransform = ref(
+    JSON.parse(localStorage.getItem('treeview-transform')) ||
+    {
+    x: 0,
+    y: 0,
+    k: 1,
+});
+
+onBeforeUnmount(function() {
+    localStorage.setItem('treeview-transform', JSON.stringify(prevTransform.value));
+});
 
 onMounted(function() {
     const svg = d3.select('.treeview')
@@ -41,17 +53,22 @@ onMounted(function() {
         .scaleExtent([0.02, 2])
         .filter((e) => !e.ctrlKey && !e.shiftKey)
         .on('zoom', (event) => {
-            //transform.x = event.transform.x;
-            //transform.y = event.transform.y;
-            //transform.k = event.transform.k;
+            prevTransform.value = {
+                x: event.transform.x,
+                y: event.transform.y,
+                k: event.transform.k,
+            };
+            //.x = event.transform.x;
+            //prevTransform.value.y = event.transform.y;
+            //prevTransform.value.k = event.transform.k;
             content.attr('transform', event.transform);
         });
 
     svg.call(zoom)
-        //.call(zoom.transform,
-        //    d3.zoomIdentity
-        //        //.translate(prevTransform.x, prevTransform.y)
-        //        //.scale(prevTransform.k))
+        .call(zoom.transform,
+            d3.zoomIdentity
+                .translate(prevTransform.value.x, prevTransform.value.y)
+                .scale(prevTransform.value.k))
         .on("dblclick.zoom", null);
 
     const size = 32;
@@ -84,8 +101,6 @@ onMounted(function() {
         .data(props.nodes)
         .join('g');
     
-    console.log(props.selected);
-    console.log(props.nodes);
     messages.append('rect')
         .attr('fill', 'white')
         .attr('stroke', (d) => d.id === props.selected ? '#cc4444' : '#444444')
@@ -115,5 +130,9 @@ onMounted(function() {
 .treeview {
     width: 100%;
     height: 100%;
+    /*
+    Inner white shadow
+    box-shadow: black 0 0 4px 4px;
+    */
 }
 </style>

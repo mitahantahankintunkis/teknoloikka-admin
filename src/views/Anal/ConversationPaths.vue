@@ -42,9 +42,12 @@ const labels = ref([]);
 const amounts = ref([]);
 const next = ref(new Set());
 
-function nextSelected(id) {
-    selected.value = id;
-    title.value = props.nodes.find((n) => n.id === Number(selected.value)).label;
+
+function setReplies(id, depth=0) {
+    if (depth > 10) {
+        console.error('Too much recursion at setReplies');
+        return;
+    }
 
     labels.value.splice(0);
     amounts.value.splice(0);
@@ -52,18 +55,14 @@ function nextSelected(id) {
 
     for (let i = 0; i < props.edges.length; ++i) {
         const e = props.edges[i];
-        let node_id = Number(selected.value) || 0;
 
-        if (e.from === node_id) {
-            //if (!e.label) {
-            //    nextSelected(e.to);
-            //    return;
-            //}
-
-            if (e.label) {
-                labels.value.push(e.label);
+        if (e.from === id) {
+            if (!e.label) {
+                setReplies(e.to, depth + 1);
+                return;
             }
 
+            labels.value.push(e.label);
             const answer = props.answers.get(e.id);
             const count = answer ? answer.count : 0;
             amounts.value.push(count);
@@ -72,6 +71,14 @@ function nextSelected(id) {
     };
 
     numOfAnswers.value = amounts.value.reduce((a, b) => a + b, 0);
+}
+
+function nextSelected(id) {
+    selected.value = id;
+    title.value = props.nodes.find((n) => n.id === Number(selected.value)).label;
+
+    setReplies(id);
+
 }
 
 nextSelected(0);

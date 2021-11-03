@@ -1,7 +1,13 @@
 <template>
     <div class="cont">
         <div class="cont-row">
-            <h3 class="card-title">Keskustelutietoa</h3>
+            <h3 class="card-title">Yleistietoa</h3>
+            <div class="card">
+                <GeneralData :key="answers.size" :nodes="nodes" :edges="edges" :answers="answers"></GeneralData>
+            </div>
+        </div>
+        <div class="cont-row">
+            <h3 class="card-title">Keskustelutiedot</h3>
             <div class="card">
                 <ConversationPaths :key="answers.size" :nodes="nodes" :edges="edges" :answers="answers"></ConversationPaths>
             </div>
@@ -15,6 +21,7 @@ import { inject, ref } from "@vue/runtime-core";
 import LineChart from "./LineChart.vue";
 import { collection, query, where, orderBy, getDocs, limit } from "firebase/firestore";
 import ConversationPaths from "./ConversationPaths.vue"; 
+import GeneralData from "./GeneralData.vue"; 
 
 
 const answers = ref(new Map());
@@ -116,7 +123,7 @@ async function fetchConversations() {
     //nextSelected(selected.value);
 }
 
-//fetchConversations();
+fetchConversations();
 
 </script>
 
@@ -125,8 +132,8 @@ async function fetchConversations() {
 .cont {
     background-color: #f2f2f2;
     width: 100%;
-    height: calc(100% - 2rem);
-    gap: 1rem;
+    min-height: calc(100%);
+    gap: 3rem;
     padding: 2rem 0 0 0;
     display: flex;
     flex-direction: column;
